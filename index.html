@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор шуток</title>
+    <style>
+        
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffc107; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.joke-card {
+    background-color: #11141a; 
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.emoji {
+    font-size: 64px;
+    margin-bottom: 25px;
+}
+
+#joke-text {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    font-weight: 500;
+    color: #e0e0e0;
+    min-height: 50px; 
+}
+
+#joke-btn {
+    background-color: #ffb339; 
+    color: #11141a;
+    border: none;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#joke-btn:hover {
+    background-color: #ffa41c;
+}
+
+#joke-btn:active {
+    transform: scale(0.98);
+}
+    </style>
+
+</head>
+<body>
+
+    <div class="joke-card">
+        <div class="emoji">😂</div>
+        
+        <p id="joke-text">Нажми на кнопку ниже, чтобы получить шутку!</p>
+        
+        <button id="joke-btn">Get Random Joke</button>
+    </div>
+
+    <script>
+        const jokeTextElement = document.getElementById('joke-text');
+const jokeBtn = document.getElementById('joke-btn');
+
+const apiURL = 'https://official-joke-api.appspot.com/random_joke';
+
+async function getJoke() {
+    try {
+        jokeTextElement.textContent = 'Thinking... 🤔';
+        
+        const response = await fetch(apiURL);
+        
+        if (!response.ok) {
+            throw new Error('Ошибка при получении данных');
+        }
+        
+        const data = await response.json();
+        
+        jokeTextElement.textContent = `${data.setup} ... ${data.punchline}`;
+        
+    } catch (error) {
+        jokeTextElement.textContent = 'Ой! Не удалось загрузить шутку. Попробуй еще раз.';
+        console.error(error);
+    }
+}
+
+jokeBtn.addEventListener('click', getJoke);
+
+getJoke();
+    </script>
+</body>
+</html>
